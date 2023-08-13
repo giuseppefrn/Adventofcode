@@ -16,6 +16,10 @@ current_path = [] #used to track current dir
 subdirs = {} 
 dir_sizes = {}
 
+total_disk_space = 70000000
+total_required_disk_space = 30000000
+dir_total_sizes = {}
+
 def parse_inputs(filepath):
     with open(filepath) as f:
         lines = f.readlines()
@@ -98,6 +102,7 @@ if __name__ == "__main__":
     for dir in dir_sizes.keys():
         logger.debug(f"dir: {dir}")
         total_size = calculate_total_size(dir)
+        dir_total_sizes[dir] = total_size
         if total_size <= 100000:
             ans += total_size
     
@@ -105,3 +110,14 @@ if __name__ == "__main__":
     logger.debug(f"dir_sizes: {dir_sizes}")
 
     print(f"part 1 completed: {ans}")
+
+
+    free_space = total_disk_space - dir_total_sizes['/'] 
+    required_dick_space = total_required_disk_space - free_space
+
+    ans_2 = 2**64
+    for v in dir_total_sizes.values():
+        if v >= required_dick_space and v < ans_2:
+            ans_2 = v
+
+    print(f"part 2 completed: {ans_2}")
